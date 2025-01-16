@@ -2,3 +2,7 @@
 version = 1
 firmware = 'build/Test2.hex'
 elf = 'build/Test2.elf'
+
+[[chip]]
+name = 'st1vafe3bx'
+binary = 'dist/chip.wasm'

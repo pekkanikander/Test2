@@ -21,5 +21,5 @@
       [ "pico:GP10", "chip1:SCL/SPC", "green", [ "h-67.2", "v-220.8" ] ],
       [ "pico:GP11", "chip1:SDA/SDI/SDO", "green", [ "h-38.4", "v-201.6" ] ]
     ],
-    "dependencies": {}
+    "dependencies": { "chip-st1vafe3bx": "github:pekkanikander/Test2@0.0.1" }
   }

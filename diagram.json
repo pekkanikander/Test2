@@ -1,25 +1,25 @@
 {
-    "version": 1,
-    "author": "Pekka Ilmari Nikander",
-    "editor": "wokwi",
-    "parts": [
-      {
-        "type": "wokwi-pi-pico",
-        "id": "pico",
-        "top": 83.25,
-        "left": 128.4,
-        "attrs": { "builder": "pico-sdk" }
-      },
-      { "type": "chip-st1vafe3bx", "id": "chip1", "top": -8.58, "left": 110.4, "attrs": {} }
-    ],
-    "connections": [
-      [ "pico:GP5", "chip1:SCL/SPC", "green", [ "h-67.2", "v-153.6" ] ],
-      [ "pico:GP4", "chip1:SDA/SDI/SDO", "green", [ "h-38.4", "v-115.2" ] ],
-      [ "pico:GP8", "chip1:SDO/TA0", "green", [ "h-48", "v-172.8" ] ],
-      [ "pico:GP9", "chip1:CS", "green", [ "h-57.6", "v-192" ] ],
-      [ "pico:GP21", "chip1:INT/EXTCLK", "green", [ "h30", "v-172.8" ] ],
-      [ "pico:GP10", "chip1:SCL/SPC", "green", [ "h-67.2", "v-220.8" ] ],
-      [ "pico:GP11", "chip1:SDA/SDI/SDO", "green", [ "h-38.4", "v-201.6" ] ]
-    ],
-    "dependencies": { "chip-st1vafe3bx": "github:pekkanikander/Test2@0.0.1" }
-  }
+  "version": 1,
+  "author": "Pekka Ilmari Nikander",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-pi-pico",
+      "id": "pico",
+      "top": 294.45,
+      "left": 330,
+      "attrs": { "builder": "pico-sdk" }
+    },
+    { "type": "chip-st1vafe3bx", "id": "chip1", "top": 211.2, "left": 316.8, "attrs": {} }
+  ],
+  "connections": [
+    [ "pico:GP5", "chip1:SCL/SPC", "green", [ "h-67.2", "v-153.6" ] ],
+    [ "pico:GP4", "chip1:SDA/SDI/SDO", "green", [ "h-38.4", "v-115.2" ] ],
+    [ "pico:GP8", "chip1:SDO/TA0", "green", [ "h-48", "v-172.8" ] ],
+    [ "pico:GP9", "chip1:CS", "green", [ "h-57.6", "v-192" ] ],
+    [ "pico:GP21", "chip1:INT/EXTCLK", "green", [ "h30", "v-172.8" ] ],
+    [ "pico:GP10", "chip1:SCL/SPC", "green", [ "h-67.2", "v-220.8" ] ],
+    [ "pico:GP11", "chip1:SDA/SDI/SDO", "green", [ "h-38.4", "v-201.6" ] ]
+  ],
+  "dependencies": { "chip-st1vafe3bx": "github:pekkanikander/Test2@0.0.1" }
+}

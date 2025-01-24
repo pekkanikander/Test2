@@ -1,68 +1,50 @@
-# Generated Cmake Pico project file
-
 cmake_minimum_required(VERSION 3.13)
 
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# ---------------------------------------------------------------------------
+# Configurable variables
+# ---------------------------------------------------------------------------
 
-# Initialise pico_sdk from installed location
-# (note this can come from environment, CMake cache etc)
+# Change this to match with the name of your Wokwi Custom Chip, all lowercase
+set(CHIP st1vafe3bx CACHE STRING "Name of the chip")
 
-# == DO NOT EDIT THE FOLLOWING LINES for the Raspberry Pi Pico VS Code Extension to work ==
-if(WIN32)
-    set(USERHOME $ENV{USERPROFILE})
-else()
-    set(USERHOME $ENV{HOME})
-endif()
-set(sdkVersion 2.1.0)
-set(toolchainVersion 13_3_Rel1)
-set(picotoolVersion 2.1.0)
-set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
-if (EXISTS ${picoVscode})
-    include(${picoVscode})
-endif()
-# ====================================================================================
-set(PICO_BOARD pico CACHE STRING "Board type")
+# ---------------------------------------------------------------------------
+# Project Definition
+# ---------------------------------------------------------------------------
+project(${CHIP} C)
 
-# Pull in Raspberry Pi Pico SDK (must be before project)
-include(pico_sdk_import.cmake)
+# ---------------------------------------------------------------------------
+# Paths and Sources, following Wokwi conventions
+# ---------------------------------------------------------------------------
+set(SOURCES    ${CMAKE_CURRENT_SOURCE_DIR}/src/${CHIP}.chip.c)
+set(CHIP_JSON  ${CMAKE_CURRENT_SOURCE_DIR}/src/${CHIP}.chip.json)
 
-project(Test2 C CXX ASM)
+set(DIST       ${CMAKE_SOURCE_DIR}/dist)
+set(TARGET     ${DIST}/chip.wasm)
 
-# Initialise the Raspberry Pi Pico SDK
-pico_sdk_init()
+file(MAKE_DIRECTORY ${DIST})
 
-# Add executable. Default name is the project name, version 0.1
-
-add_executable(Test2 Test2.c )
-
-pico_set_program_name(Test2 "Test2")
-pico_set_program_version(Test2 "0.1")
-
-# Generate PIO header
-pico_generate_pio_header(Test2 ${CMAKE_CURRENT_LIST_DIR}/blink.pio)
-
-# Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(Test2 1)
-pico_enable_stdio_usb(Test2 0)
-
-# Add the standard library to the build
-target_link_libraries(Test2
-        pico_stdlib)
-
-# Add the standard include files to the build
-target_include_directories(Test2 PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}
+# ---------------------------------------------------------------------------
+# Copy chip JSON description for host-local Wokwi usage and Github releases
+# ---------------------------------------------------------------------------
+add_custom_target(copy_chip_json
+    COMMAND ${CMAKE_COMMAND} -E copy ${CHIP_JSON} ${DIST}/chip.json
+    DEPENDS ${CHIP_JSON}
 )
 
-# Add any user requested libraries
-target_link_libraries(Test2 
-        hardware_spi
-        hardware_i2c
-        hardware_dma
-        hardware_pio
-        )
+# ---------------------------------------------------------------------------
+# Build the WASM binary for host-local Wokwi usage and Github releases
+# ---------------------------------------------------------------------------
+# Put final artifact in ${TARGET}
+get_filename_component(TARGET_DIR    "${TARGET}" DIRECTORY) # -> "dist"
+get_filename_component(TARGET_NAME   "${TARGET}" NAME_WLE)  # -> "chip"
+get_filename_component(TARGET_SUFFIX "${TARGET}" LAST_EXT)  # -> ".wasm"
 
-pico_add_extra_outputs(Test2)
+add_executable(${CHIP}_wasm ${SOURCES})
 
+set_target_properties(${CHIP}_wasm PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${TARGET_DIR}"
+    OUTPUT_NAME              "${TARGET_NAME}"
+    SUFFIX                   "${TARGET_SUFFIX}"
+)
+
+add_dependencies(${CHIP}_wasm copy_chip_json)
